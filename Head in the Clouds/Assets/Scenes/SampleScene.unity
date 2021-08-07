@@ -135,8 +135,8 @@ GameObject:
   - component: {fileID: 292730942}
   - component: {fileID: 292730945}
   - component: {fileID: 292730944}
-  - component: {fileID: 292730946}
   - component: {fileID: 292730947}
+  - component: {fileID: 292730946}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -250,7 +250,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -271,6 +271,8 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 256
+  speed: 7
+  playerJumpForce: 12
 --- !u!95 &292730947
 Animator:
   serializedVersion: 3
