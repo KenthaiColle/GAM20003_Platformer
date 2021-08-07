@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Collider2D coll; //Boxcollider 2D and other collider2D can fall into Collider2D since Boxcollider inherit Collider2D
 
 
+    public int cherries = 0;
+
     //Finite State Machine
     private enum StateList {idle, running, jumping, falling}
     private StateList playerState = StateList.idle;
@@ -35,6 +37,15 @@ public class PlayerController : MonoBehaviour
         Movement();
         AnimationState();
         anim.SetInteger("state", (int)playerState); //int in front of state convert the enum into integer. Sets animation based on enum state
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Collectable")
+        {
+            Destroy(collision.gameObject); //destroy the collectable
+            cherries += 1;
+        }
     }
 
     private void Movement()
@@ -76,7 +87,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(playerState == StateList.falling) //check if state is falling
+        else if(playerState == StateList.falling) //check if state is falling
         {
             if (coll.IsTouchingLayers(ground))//check if the player is touching the ground layer or not.
             {
