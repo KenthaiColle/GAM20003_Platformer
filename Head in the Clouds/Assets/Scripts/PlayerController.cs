@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,9 +9,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll; //Boxcollider 2D and other collider2D can fall into Collider2D since Boxcollider inherit Collider2D
-
-
-    public int cherries = 0;
 
     //Finite State Machine
     private enum StateList {idle, running, jumping, falling}
@@ -21,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 7f;
     [SerializeField] private float playerJumpForce = 12f;
+    [SerializeField] private int cherriesAmount = 0;
+    [SerializeField] private Text collectableText;
 
 
     // Start is called before the first frame update
@@ -44,7 +44,8 @@ public class PlayerController : MonoBehaviour
         if(collision.tag == "Collectable")
         {
             Destroy(collision.gameObject); //destroy the collectable
-            cherries += 1;
+            cherriesAmount += 1;
+            collectableText.text = "Cherries: " + cherriesAmount.ToString();
         }
     }
 
