@@ -12,9 +12,10 @@ public class PlayerController : MonoBehaviour
     private Collider2D coll; //Boxcollider 2D and other collider2D can fall into Collider2D since Boxcollider inherit Collider2D
 
     //Finite State Machine
-    private enum StateList {idle, running, jumping, falling, hurt}
+    private enum StateList {idle, running, jumping, falling, hurt, blinking, braking}
     private StateList playerState = StateList.idle;
-
+    private bool finishedBlink = false;
+    public bool gameFinished = false;
 
     //Inspector variable
     [SerializeField] private LayerMask ground;
@@ -97,7 +98,7 @@ public class PlayerController : MonoBehaviour
             if (rb.velocity.x >= -speed && coll.IsTouchingLayers(ground))
             {
                 rb.velocity = new Vector2(-speed, rb.velocity.y);
-                gameObject.GetComponent<SpriteRenderer>().flipX = true; //flips the character
+                gameObject.GetComponent<SpriteRenderer>().flipX = false; //flips the character
             }
             //else
             //{
@@ -113,7 +114,7 @@ public class PlayerController : MonoBehaviour
             if(rb.velocity.x <= speed && coll.IsTouchingLayers(ground))
             {
                 rb.velocity = new Vector2(speed, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
-                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                gameObject.GetComponent<SpriteRenderer>().flipX = true;
                 Debug.Log("should not work");
             }
             //else
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviour
                 if (rb.velocity.x > 0)// check if val is already negative
                 {
                     rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
-                    gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                    gameObject.GetComponent<SpriteRenderer>().flipX = false;
                 }
                 //else
                 //{
@@ -143,7 +144,7 @@ public class PlayerController : MonoBehaviour
                 if(rb.velocity.x < 0)// check if val is already negative
                 {
                     rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
-                    gameObject.GetComponent<SpriteRenderer>().flipX = false; //Make this flip right and flip left funtion.
+                    gameObject.GetComponent<SpriteRenderer>().flipX = true; //Make this flip right and flip left funtion.
                 }
                 //else
                 //{
@@ -175,21 +176,25 @@ public class PlayerController : MonoBehaviour
 
         }
         
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1")) //Blink teleport
         {
             transform.position = new Vector2(transform.position.x + rb.velocity.x, transform.position.y);
+            playerState = StateList.blinking;
+
         }
         if (Input.GetButtonDown("Fire2"))
         {
             if (rb.velocity.x > 0f)
             {
                 rb.velocity = new Vector2(speed, rb.velocity.y);
-                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                playerState = StateList.braking;
             }
             if (rb.velocity.x < 0f)
             {
                 rb.velocity = new Vector2(-speed, rb.velocity.y);
-                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                playerState = StateList.braking;
             }
 
         }
@@ -198,8 +203,16 @@ public class PlayerController : MonoBehaviour
     //Methods that checks the state of the player for animations
     private void AnimationState()
     {
+        if (playerState == StateList.blinking || finishedBlink == false) //check if animation played yet
+        {
+            finishedBlink = true;
+        }
+        else if(playerState == StateList.blinking && finishedBlink == true)
+        {
+            playerState = StateList.idle;
+        }
 
-        if(playerState == StateList.jumping) //check if state is jumping, if it is it won't run the elseif
+        else if(playerState == StateList.jumping) //check if state is jumping, if it is it won't run the elseif
         {
             if(rb.velocity.y < .1f) //check if the player's y velocity is less than 1f
             {

@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     public Transform player;
     private Camera camera;
-    float cameraZoom = 20f;
+    public float cameraZoom = 20f;
 
     // Start is called before the first frame update
     void Start()
