@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Collectable
   - Enemy
+  - HighScore
+  - CheckPoint
+  - GameManager
+  - GC
+  - DeathGround
   layers:
   - Default
   - TransparentFX

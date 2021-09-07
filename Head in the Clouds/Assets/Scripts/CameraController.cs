@@ -12,12 +12,13 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         camera = GetComponent<Camera>();
-        camera.orthographicSize = cameraZoom;
+        //camera.orthographicSize = cameraZoom;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(player.position.x, player.position.y, transform.position.z); //only take the x and y from the player, Z stays the same.
+        transform.position = new Vector3(player.position.x, player.position.y, cameraZoom); //NEW ONE IS FOR PERSPECTIVE//only take the x and y from the player, Z stays the same.
     }
 }

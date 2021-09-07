@@ -37,7 +37,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerState != StateList.hurt) //If player is hurt, movement cannot occur.
+        
+        if (playerState != StateList.hurt) //If player is hurt, movement cannot occur.
         {
             Movement();
         }
@@ -53,7 +54,12 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(collision.gameObject); //destroy the collectable
             cherriesAmount += 1;
-            collectableText.text = "Cherries: " + cherriesAmount.ToString();
+            collectableText.text = "Keys: " + cherriesAmount.ToString();
+        }
+        if (collision.gameObject.tag == "HighScore")
+        {
+            gameFinished = true;
+            Debug.Log(gameFinished);
         }
     }
 
@@ -61,7 +67,6 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.tag == "Enemy")
         {
-            Debug.Log("Ouch");
             if(playerState == StateList.falling)
             {
                 Destroy(other.gameObject);
@@ -75,8 +80,6 @@ public class PlayerController : MonoBehaviour
                 {
                     //Therefore move the player left and take damage
                     rb.velocity = new Vector2(-hurtForce, rb.velocity.y);
-                    Debug.Log("worK");
-                    Debug.Log(rb.velocity.x);
                 }
                 else
                 {
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
     }
 
     private void Movement()
@@ -115,7 +119,6 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(speed, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                Debug.Log("should not work");
             }
             //else
             //{
@@ -124,7 +127,7 @@ public class PlayerController : MonoBehaviour
             //}
         }
 
-        if (Input.GetButtonDown("Horizontal") && playerState == StateList.jumping || playerState == StateList.falling)
+        if (Input.GetButtonDown("Horizontal") && playerState == StateList.jumping || playerState == StateList.falling || playerState == StateList.blinking || playerState == StateList.braking)
         {
             if (hDirection < 0) 
             {
@@ -180,6 +183,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector2(transform.position.x + rb.velocity.x, transform.position.y);
             playerState = StateList.blinking;
+             anim.SetInteger("state", (int)playerState);
 
         }
         if (Input.GetButtonDown("Fire2"))
@@ -207,7 +211,7 @@ public class PlayerController : MonoBehaviour
         {
             finishedBlink = true;
         }
-        else if(playerState == StateList.blinking && finishedBlink == true)
+        else if (playerState == StateList.blinking && finishedBlink == true)//
         {
             playerState = StateList.idle;
         }
@@ -255,4 +259,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, playerJumpForce); //Everytime we jump/flap wings we go faster REMEMBER TO CHANGE THAT FREAKING MAGIC NUMBER
         playerState = StateList.jumping;
     }
+
+
 }
