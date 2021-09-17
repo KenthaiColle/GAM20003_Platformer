@@ -30,17 +30,15 @@ public class DeathCloud : MonoBehaviour
     {
         if (shouldMove) //If this cloud should be moving
         {
-            //test to see if we are beyond the leftcap
+            //test to see if we are less than the lowerCap
             if (transform.position.y < lowerCap)
             {
-                rb.velocity = new Vector2(0, moveSpeed); //Move left if hit limit
-                Debug.Log("Going Down");
+                rb.velocity = new Vector2(0, moveSpeed); //Move up if hit limit
             }
+            //checks if the cloud is bigger than the higherCap
             if (transform.position.y > higherCap)
             {
-
-                rb.velocity = new Vector2(0, -moveSpeed); //Move right if hit limit
-                Debug.Log("Going up");
+                rb.velocity = new Vector2(0, -moveSpeed); //Move downn if hit limit
             }
 
         }

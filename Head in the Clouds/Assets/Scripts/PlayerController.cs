@@ -129,32 +129,39 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Horizontal") && playerState == StateList.jumping || playerState == StateList.falling || playerState == StateList.blinking || playerState == StateList.braking)
         {
-            if (hDirection < 0) 
+            if (hDirection < 0)
             {
                 if (rb.velocity.x > 0)// check if val is already negative
                 {
                     rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
                     gameObject.GetComponent<SpriteRenderer>().flipX = false;
                 }
-                //else
-                //{
-                //    rb.velocity = new Vector2(rb.velocity.x - .5f, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
-                //    gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                //}
+
             }
             if (hDirection > 0)
             {
-                if(rb.velocity.x < 0)// check if val is already negative
+                if (rb.velocity.x < 0)// check if val is already negative
                 {
                     rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
                     gameObject.GetComponent<SpriteRenderer>().flipX = true; //Make this flip right and flip left funtion.
                 }
-                //else
-                //{
-                //    rb.velocity = new Vector2(rb.velocity.x + .5f, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
-                //    gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                //}
-                
+
+            }
+
+            //If the player just jump without moving so vel for x == 0. Then move.
+            if (rb.velocity.x == 0)
+            {
+                if (hDirection < 0)
+                {
+                    rb.velocity = new Vector2(-speed, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
+                    gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                }
+
+                if (hDirection > 0)
+                {
+                    rb.velocity = new Vector2(speed, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
+                    gameObject.GetComponent<SpriteRenderer>().flipX = true; //Make this flip right and flip left funtion.
+                }
             }
         }
 
@@ -186,18 +193,17 @@ public class PlayerController : MonoBehaviour
              anim.SetInteger("state", (int)playerState);
 
         }
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2")) //air brake
         {
             if (rb.velocity.x > 0f)
             {
-                rb.velocity = new Vector2(speed, rb.velocity.y);
-                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                rb.velocity = new Vector2(0, rb.velocity.y);
                 playerState = StateList.braking;
+                Debug.Log("Braking");
             }
             if (rb.velocity.x < 0f)
             {
-                rb.velocity = new Vector2(-speed, rb.velocity.y);
-                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                rb.velocity = new Vector2(0, rb.velocity.y);
                 playerState = StateList.braking;
             }
 
