@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Wind : MonoBehaviour
 {
-    float _speed = 20f;
+    float speed = 20f;
     float delayTimer = 3f;
 
     private Rigidbody2D rb;
@@ -23,12 +23,12 @@ public class Wind : MonoBehaviour
 
     public void BlowLeft() //Blow left side
     {
-        rb.velocity = new Vector2(-_speed, rb.velocity.y);
+        rb.velocity = new Vector2(-speed, rb.velocity.y);
         StartCoroutine(DelayDestroy());
     }
     public void BlowRight() //Blow right side
     {
-        rb.velocity = new Vector2(_speed, rb.velocity.y);
+        rb.velocity = new Vector2(speed, rb.velocity.y);
         StartCoroutine(DelayDestroy());
     }
 

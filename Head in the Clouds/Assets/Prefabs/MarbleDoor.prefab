@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 642424832344085389}
   - component: {fileID: 642424832344085388}
   - component: {fileID: 642424832344085427}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MarbleDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

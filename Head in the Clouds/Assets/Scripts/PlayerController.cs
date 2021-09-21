@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 7f;
     [SerializeField] private float playerJumpForce = 12f;
-    [SerializeField] private int cherriesAmount = 0;
+    [SerializeField] private int keysAmount = 0;
     [SerializeField] private Text collectableText;
     [SerializeField] private float hurtForce = 10f;
 
@@ -54,9 +54,15 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.tag == "Collectable")
         {
-            Destroy(collision.gameObject); //destroy the collectable
-            cherriesAmount += 1;
-            collectableText.text = "Keys: " + cherriesAmount.ToString();
+            BoxCollider2D collider = collision.gameObject.GetComponent<BoxCollider2D>(); //destroy the collectable
+            SpriteRenderer sprite = collision.gameObject.GetComponent<SpriteRenderer>();
+
+            collider.enabled = false;
+            sprite.enabled = false;
+
+
+            keysAmount += 1;
+            collectableText.text = "Keys: " + keysAmount.ToString();
         }
         if (collision.gameObject.tag == "HighScore")
         {
@@ -199,13 +205,13 @@ public class PlayerController : MonoBehaviour
         {
             if(rb.velocity.x > 10f)
             {
-                GameObject newWind = Instantiate(wind, transform.position, transform.rotation);
+                GameObject newWind = (GameObject)Instantiate(wind, transform.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowRight();
             }
             if (rb.velocity.x < -10f)
             {
-                GameObject newWind = Instantiate(wind, transform.position, transform.rotation);
+                GameObject newWind = Instantiate(wind, transform.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowLeft();
             }

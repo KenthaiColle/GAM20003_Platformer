@@ -5,6 +5,7 @@ using UnityEngine;
 public class WindmillDoor : MonoBehaviour
 {
     public Rigidbody2D rb;
+    public Collider2D coll;
 
     // Start is called before the first frame update
     void Start()

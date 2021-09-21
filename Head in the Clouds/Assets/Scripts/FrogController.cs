@@ -16,7 +16,7 @@ public class FrogController : MonoBehaviour
     private Collider2D coll;
     private Rigidbody2D rb;
 
-
+    float originalXPos;
 
 
     // Start is called before the first frame update
@@ -24,16 +24,19 @@ public class FrogController : MonoBehaviour
     {
         coll = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        originalXPos = transform.position.x;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(transform.position.x - leftCap);
+        Debug.Log("Origin: " + originalXPos);
         if (facingLeft)
         {
             
             //test to see if we are beyond the leftcap
-            if (transform.position.x > leftCap)
+            if (transform.position.x > originalXPos - leftCap)
             {
                 if (transform.localScale.x != 1)
                 {
@@ -58,7 +61,7 @@ public class FrogController : MonoBehaviour
         {
            
             //test to see if we are beyond the rightcap
-            if (transform.position.x < rightCap)
+            if (transform.position.x < originalXPos + rightCap)
             {
                 if (transform.localScale.x != -1)
                 {
