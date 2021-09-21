@@ -7,6 +7,8 @@ public class DeathCloud : MonoBehaviour
     [SerializeField] private float lowerCap;
     [SerializeField] private float higherCap;
 
+    private float originalYPos;
+
     [SerializeField] private float moveSpeed;
 
     [SerializeField] private bool shouldMove = false;
@@ -23,6 +25,7 @@ public class DeathCloud : MonoBehaviour
         coll = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(0, moveSpeed);
+        originalYPos = transform.position.y;
     }
 
     // Update is called once per frame
@@ -31,12 +34,12 @@ public class DeathCloud : MonoBehaviour
         if (shouldMove) //If this cloud should be moving
         {
             //test to see if we are less than the lowerCap
-            if (transform.position.y < lowerCap)
+            if (transform.position.y < originalYPos - lowerCap)
             {
                 rb.velocity = new Vector2(0, moveSpeed); //Move up if hit limit
             }
             //checks if the cloud is bigger than the higherCap
-            if (transform.position.y > higherCap)
+            if (transform.position.y > originalYPos + higherCap)
             {
                 rb.velocity = new Vector2(0, -moveSpeed); //Move downn if hit limit
             }

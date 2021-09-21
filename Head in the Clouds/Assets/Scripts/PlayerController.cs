@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Text collectableText;
     [SerializeField] private float hurtForce = 10f;
 
+    public GameObject wind;
+    public Wind windScript;
 
     // Start is called before the first frame update
     private void Start()
@@ -195,6 +197,19 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButtonDown("Fire2")) //air brake
         {
+            if(rb.velocity.x > 10f)
+            {
+                GameObject newWind = Instantiate(wind, transform.position, transform.rotation);
+                windScript = newWind.GetComponent<Wind>();
+                windScript.BlowRight();
+            }
+            if (rb.velocity.x < -10f)
+            {
+                GameObject newWind = Instantiate(wind, transform.position, transform.rotation);
+                windScript = newWind.GetComponent<Wind>();
+                windScript.BlowLeft();
+            }
+
             if (rb.velocity.x > 0f)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
