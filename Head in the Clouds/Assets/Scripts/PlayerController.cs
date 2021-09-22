@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private StateList playerState = StateList.idle;
     private bool finishedBlink = false;
     public bool gameFinished = false;
+    private bool finishBrake = false;
 
     //Inspector variable
     [SerializeField] private LayerMask ground;
@@ -229,12 +230,13 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 playerState = StateList.braking;
-                Debug.Log("Braking");
+                finishBrake = false;
             }
             if (rb.velocity.x < 0f)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 playerState = StateList.braking;
+                finishBrake = false;
             }
 
         }
@@ -252,6 +254,18 @@ public class PlayerController : MonoBehaviour
             playerState = StateList.idle;
         }
 
+        else if(playerState == StateList.braking)
+        {
+            if(finishBrake == false)
+            {
+                finishBrake = true;
+                
+            }
+            else
+            {
+                playerState = StateList.idle;
+            }
+        }
         else if(playerState == StateList.jumping) //check if state is jumping, if it is it won't run the elseif
         {
             if(rb.velocity.y < .1f) //check if the player's y velocity is less than 1f
