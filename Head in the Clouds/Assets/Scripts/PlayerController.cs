@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     //Start() Variable
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll; //Boxcollider 2D and other collider2D can fall into Collider2D since Boxcollider inherit Collider2D
 
@@ -25,8 +25,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Text collectableText;
     [SerializeField] private float hurtForce = 10f;
 
+    //Sound
+    [SerializeField] private AudioSource wingFlap;
+    [SerializeField] private AudioSource blink;
+
     public GameObject wind;
     public Wind windScript;
+
+    public Transform windSpawnRight;
+    public Transform windSpawnLeft;
 
     // Start is called before the first frame update
     private void Start()
@@ -73,29 +80,29 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.tag == "Enemy")
-        {
-            if(playerState == StateList.falling)
-            {
-                Destroy(other.gameObject);
-                jump();
-            }
-            else
-            {
-                playerState = StateList.hurt;
-                Debug.Log(playerState);
-                if (other.gameObject.transform.position.x > transform.position.x)//If the enemy's position is greater than the player's then it's to the player's right
-                {
-                    //Therefore move the player left and take damage
-                    rb.velocity = new Vector2(-hurtForce, rb.velocity.y);
-                }
-                else
-                {
-                    //enemy is to the left so move the player right.
-                    rb.velocity = new Vector2(hurtForce, rb.velocity.y);
-                }
-            }
-        }
+        //if(other.gameObject.tag == "Enemy")
+        //{
+        //    if(playerState == StateList.falling)
+        //    {
+        //        Destroy(other.gameObject);
+        //        jump();
+        //    }
+        //    else
+        //    {
+        //        playerState = StateList.hurt;
+        //        Debug.Log(playerState);
+        //        if (other.gameObject.transform.position.x > transform.position.x)//If the enemy's position is greater than the player's then it's to the player's right
+        //        {
+        //            //Therefore move the player left and take damage
+        //            rb.velocity = new Vector2(-hurtForce, rb.velocity.y);
+        //        }
+        //        else
+        //        {
+        //            //enemy is to the left so move the player right.
+        //            rb.velocity = new Vector2(hurtForce, rb.velocity.y);
+        //        }
+        //    }
+        //}
 
     }
 
@@ -176,6 +183,7 @@ public class PlayerController : MonoBehaviour
         //GetKeyDown just take the input once (even if hold) while GetKey is constant.
         if (Input.GetButtonDown("Jump")) // && coll.IsTouchingLayers(ground)
         {
+            wingFlap.Play();
             if (rb.velocity.x > 0f)
             {
                 rb.velocity = new Vector2(rb.velocity.x + 5f, playerJumpForce); //Everytime we jump/flap wings we go faster REMEMBER TO CHANGE THAT FREAKING MAGIC NUMBER
@@ -196,6 +204,7 @@ public class PlayerController : MonoBehaviour
         
         if (Input.GetButtonDown("Fire1")) //Blink teleport
         {
+            blink.Play();
             transform.position = new Vector2(transform.position.x + rb.velocity.x, transform.position.y);
             playerState = StateList.blinking;
              anim.SetInteger("state", (int)playerState);
@@ -205,13 +214,13 @@ public class PlayerController : MonoBehaviour
         {
             if(rb.velocity.x > 10f)
             {
-                GameObject newWind = (GameObject)Instantiate(wind, transform.position, transform.rotation) as GameObject;
+                GameObject newWind = (GameObject)Instantiate(wind, windSpawnRight.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowRight();
             }
             if (rb.velocity.x < -10f)
             {
-                GameObject newWind = Instantiate(wind, transform.position, transform.rotation) as GameObject;
+                GameObject newWind = Instantiate(wind, windSpawnLeft.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowLeft();
             }

@@ -30,8 +30,6 @@ public class FrogController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(transform.position.x - leftCap);
-        Debug.Log("Origin: " + originalXPos);
         if (facingLeft)
         {
             

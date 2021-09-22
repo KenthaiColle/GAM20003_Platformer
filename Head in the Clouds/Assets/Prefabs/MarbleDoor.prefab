@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 642424832344085389}
   - component: {fileID: 642424832344085388}
   - component: {fileID: 642424832344085427}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: MarbleDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 642424832344085427}
+  coll: {fileID: 0}
 --- !u!61 &642424832344085388
 BoxCollider2D:
   m_ObjectHideFlags: 0

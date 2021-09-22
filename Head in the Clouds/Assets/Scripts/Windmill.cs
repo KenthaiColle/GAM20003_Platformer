@@ -36,7 +36,7 @@ public class Windmill : MonoBehaviour
     {
         if (vertical == true)
         {
-            if (originalYPos > wd.transform.position.y + finalDistance) //if the position is greater than the door's original pos + the distance the door should move then it stops
+            if (wd.transform.position.y > originalYPos + finalDistance) //if the position is greater than the door's original pos + the distance the door should move then it stops
             {
                 wd.rb.velocity = new Vector2(0, 0);
             }
@@ -58,7 +58,7 @@ public class Windmill : MonoBehaviour
             anim.SetBool("Activated", true);
         }
     }
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if(vertical == true)
         {
@@ -66,7 +66,7 @@ public class Windmill : MonoBehaviour
             {
                 wd.rb.velocity = new Vector2(0, doorSpeed);
                 active = true;
-                wd.coll.enabled = false;
+                //wd.coll.enabled = false;
             }
         }
         else
@@ -77,7 +77,7 @@ public class Windmill : MonoBehaviour
                 {
                     wd.rb.velocity = new Vector2(-doorSpeed, 0);
                     active = true;
-                    wd.coll.enabled = false;
+                    //wd.coll.enabled = false;
                 }
             }
             else //If the door should move right

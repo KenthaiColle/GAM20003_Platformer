@@ -6,6 +6,8 @@ public class Lightning : MonoBehaviour
 {
     private Collider2D coll;
     private Animator anim;
+    [SerializeField] private AudioSource lightning;
+
     private float leftAniTime;
     bool coroutineStarted = false;
 
@@ -32,6 +34,7 @@ public class Lightning : MonoBehaviour
     }
     private IEnumerator EnableColl()
     {
+        lightning.Play();
         Debug.Log("Play Anim");
         coll.enabled = true;
         anim.SetBool("On", true);
