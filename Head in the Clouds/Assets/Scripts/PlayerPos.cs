@@ -7,6 +7,8 @@ public class PlayerPos : MonoBehaviour
     GameController gc;
     private Rigidbody2D rb;
 
+    private float delayTimer = 3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +20,15 @@ public class PlayerPos : MonoBehaviour
     {
         if(other.gameObject.tag == "Enemy" || other.gameObject.tag == "DeathGround")
         {
-            transform.position = gc.lastCheckpointPos; //Change the position to the last checkpoint if the player dies
-            rb.velocity = new Vector2(0, 0); //reset velocity
+            anim.SetInteger("state", 4);
         }
+    }
+    private IEnumerator Die() //Delay the self destruct.
+    {
+        
+        yield return new WaitForSeconds(delayTimer);
+        StartCoroutine(Die());
+        transform.position = gc.lastCheckpointPos; //Change the position to the last checkpoint if the player dies
+        rb.velocity = new Vector2(0, 0); //reset velocity;
     }
 }

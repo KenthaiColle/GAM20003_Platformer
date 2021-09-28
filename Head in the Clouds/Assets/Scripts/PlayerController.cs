@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private Collider2D coll; //Boxcollider 2D and other collider2D can fall into Collider2D since Boxcollider inherit Collider2D
 
     //Finite State Machine
-    private enum StateList {idle, running, jumping, falling, hurt, blinking, braking}
+    private enum StateList {idle, running, jumping, falling, die, blinking, braking}
     private StateList playerState = StateList.idle;
     private bool finishedBlink = false;
     public bool gameFinished = false;
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 7f;
     [SerializeField] private float playerJumpForce = 12f;
+    [SerializeField] private float playerJumpSpeed = 12f;
     [SerializeField] private int keysAmount = 0;
     [SerializeField] private Text collectableText;
     [SerializeField] private float hurtForce = 10f;
@@ -187,12 +188,12 @@ public class PlayerController : MonoBehaviour
             wingFlap.Play();
             if (rb.velocity.x > 0f)
             {
-                rb.velocity = new Vector2(rb.velocity.x + 5f, playerJumpForce); //Everytime we jump/flap wings we go faster REMEMBER TO CHANGE THAT FREAKING MAGIC NUMBER
+                rb.velocity = new Vector2(rb.velocity.x + playerJumpSpeed, playerJumpForce); //Everytime we jump/flap wings we go faster REMEMBER TO CHANGE THAT FREAKING MAGIC NUMBER
                 playerState = StateList.jumping;
             }
             else if (rb.velocity.x < 0f)
             {
-                rb.velocity = new Vector2(rb.velocity.x - 5f, playerJumpForce);
+                rb.velocity = new Vector2(rb.velocity.x - playerJumpSpeed, playerJumpForce);
                 playerState = StateList.jumping;
             }
             else
@@ -281,13 +282,13 @@ public class PlayerController : MonoBehaviour
                 playerState = StateList.idle; //set state to idle
             }
         }
-        else if (playerState == StateList.hurt)
-        {
-            if(Mathf.Abs(rb.velocity.x) < .1f) //If player is idle/stopped, the staate chaanges back to idle
-            {
-                playerState = StateList.idle;
-            }   
-        }
+        //else if (playerState == StateList.hurt)
+        //{
+        //    if(Mathf.Abs(rb.velocity.x) < .1f) //If player is idle/stopped, the staate chaanges back to idle
+        //    {
+        //        playerState = StateList.idle;
+        //    }   
+        //}
         else if ((rb.velocity.y) < -4f) //
         {
             playerState = StateList.falling;
