@@ -10,10 +10,11 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll; //Boxcollider 2D and other collider2D can fall into Collider2D since Boxcollider inherit Collider2D
+    GameController gc;
 
     //Finite State Machine
-    private enum StateList {idle, running, jumping, falling, die, blinking, braking}
-    private StateList playerState = StateList.idle;
+    public enum StateList {idle, running, jumping, falling, die, blinking, braking}
+    public StateList playerState = StateList.idle;
     private bool finishedBlink = false;
     public bool gameFinished = false;
     private bool finishBrake = false;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int keysAmount = 0;
     [SerializeField] private Text collectableText;
     [SerializeField] private float hurtForce = 10f;
+    [SerializeField] private float delayTimer = 1.02f;
 
     //Sound
     [SerializeField] private AudioSource wingFlap;
@@ -36,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform windSpawnRight;
     public Transform windSpawnLeft;
+    public Transform aimTransform;
+
 
     // Start is called before the first frame update
     private void Start()
@@ -43,17 +47,31 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        gc = GameObject.FindGameObjectWithTag("GC").GetComponent<GameController>();
+        
+
+    }
+    private void Awake()
+    {
+        aimTransform = transform.Find("Aim");
     }
 
     // Update is called once per frame
     void Update()
     {
+        AimBow();
         
-        if (playerState != StateList.hurt) //If player is hurt, movement cannot occur.
+        Debug.Log("Bow Pos is: " + aimTransform.position);
+        if (playerState == StateList.die)
+        {
+            rb.velocity = new Vector3(0, 0);
+        }
+        else if (playerState != StateList.die) //If player is hurt, movement cannot occur.
         {
             Movement();
+            AnimationState();
         }
-        AnimationState();
+        
         anim.SetInteger("state", (int)playerState); //int in front of state convert the enum into integer. Sets animation based on enum state
 
         //Debug.Log(rb.velocity.x);
@@ -61,23 +79,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Collectable")
-        {
-            BoxCollider2D collider = collision.gameObject.GetComponent<BoxCollider2D>(); //destroy the collectable
-            SpriteRenderer sprite = collision.gameObject.GetComponent<SpriteRenderer>();
+        //if(collision.tag == "Collectable")
+        //{
+        //    BoxCollider2D collider = collision.gameObject.GetComponent<BoxCollider2D>(); //destroy the collectable
+        //    SpriteRenderer sprite = collision.gameObject.GetComponent<SpriteRenderer>();
 
-            collider.enabled = false;
-            sprite.enabled = false;
+        //    collider.enabled = false;
+        //    sprite.enabled = false;
 
 
-            keysAmount += 1;
-            collectableText.text = "Keys: " + keysAmount.ToString();
-        }
+        //    keysAmount += 1;
+        //    collectableText.text = "Keys: " + keysAmount.ToString();
+        //}
         if (collision.gameObject.tag == "HighScore")
         {
             gameFinished = true;
             Debug.Log(gameFinished);
         }
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "DeathGround")
+        {
+            if(playerState != StateList.die)
+            {
+                playerState = StateList.die;
+            }
+            
+        }
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -105,6 +133,13 @@ public class PlayerController : MonoBehaviour
         //        }
         //    }
         //}
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "DeathGround")
+        {
+            if (playerState != StateList.die)
+            {
+                playerState = StateList.die;
+            }
+        }
 
     }
 
@@ -304,6 +339,24 @@ public class PlayerController : MonoBehaviour
             playerState = StateList.idle; //set state to idle
         }
     }
+
+    private void AimBow()
+    {
+        Debug.Log("Mouse Pos is: " + Input.mousePosition);
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0f;
+
+
+        // Vector with the value of X and Y
+        Vector3 aimDirection = (mousePosition - transform.position).normalized;
+
+        // Pass Y and X and return the radians and turn radiants into degree
+        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+
+        aimTransform.eulerAngles = new Vector3(0, 0, angle);
+
+        Debug.Log(angle);
+    }
     
     private void jump()
     {
@@ -311,5 +364,16 @@ public class PlayerController : MonoBehaviour
         playerState = StateList.jumping;
     }
 
+    private void Die()
+    {
+        transform.position = gc.lastCheckpointPos; //Change the position to the last checkpoint if the player dies
+        rb.velocity = new Vector2(0, 0); //reset velocity;
+        playerState = StateList.idle;
+        anim.SetInteger("state", 0);
+    }
 
+
+
+    
+    
 }

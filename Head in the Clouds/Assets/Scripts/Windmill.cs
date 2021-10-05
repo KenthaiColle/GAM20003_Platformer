@@ -21,6 +21,7 @@ public class Windmill : MonoBehaviour
     [SerializeField] float finalDistance;
 
     private Animator anim;
+    [SerializeField] private Transform propeller; 
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +56,7 @@ public class Windmill : MonoBehaviour
         
         if(active == true)
         {
-            anim.SetBool("Activated", true);
+            propeller.Rotate(0, 0, 50 * Time.deltaTime); //rotates 50 degrees per second around z axis
         }
     }
     private void OnTriggerEnter2D(Collider2D other)

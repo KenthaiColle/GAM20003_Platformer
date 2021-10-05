@@ -12,6 +12,7 @@ TagManager:
   - GC
   - DeathGround
   - Wind
+  - DoorWayToEarth
   layers:
   - Default
   - TransparentFX
