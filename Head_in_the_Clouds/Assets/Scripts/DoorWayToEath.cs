@@ -12,6 +12,7 @@ public class DoorWayToEath : MonoBehaviour
         if(collision.gameObject.tag == "Collectable")
         {
             numberOfKeys++;
+            //Destroy(collision.gameObject);
         }
     }
 

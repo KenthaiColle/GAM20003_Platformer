@@ -341,6 +341,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(0, 0); //reset velocity;
         playerState = StateList.idle;
         anim.SetInteger("state", 0);
+        GotDeathPosition = false;
     }
 
 
