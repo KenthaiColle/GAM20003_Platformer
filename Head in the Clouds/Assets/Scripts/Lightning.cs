@@ -35,7 +35,7 @@ public class Lightning : MonoBehaviour
     private IEnumerator EnableColl()
     {
         lightning.Play();
-        Debug.Log("Play Anim");
+        //Debug.Log("Play Anim");
         coll.enabled = true;
         anim.SetBool("On", true);
         yield return new WaitForSeconds(0.27f);

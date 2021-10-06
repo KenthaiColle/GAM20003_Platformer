@@ -48,6 +48,11 @@ public class Key : MonoBehaviour
 
                 transform.position = player.transform.position;
             }
+            else if (pc.playerState == PlayerController.StateList.die)
+            {
+                collected = false;
+                gameObject.transform.position = new Vector3(originalXPos, originalYPos, 0);
+            }
             else
             {
                 //follow the player
@@ -56,10 +61,6 @@ public class Key : MonoBehaviour
             
             //transform.position = Vector3.Lerp(originalTransform, player.transform.position, Time.time);
         }
-        if(pc.playerState == PlayerController.StateList.die)
-        {
-            collected = false;
-            gameObject.transform.position = new Vector3(originalXPos, originalYPos, 0);
-        }
+        
     }
 }

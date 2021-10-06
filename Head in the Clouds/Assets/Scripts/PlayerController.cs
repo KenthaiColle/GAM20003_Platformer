@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,7 +40,9 @@ public class PlayerController : MonoBehaviour
     public Transform windSpawnLeft;
     public Transform aimTransform;
 
-
+    float deathPosX;
+    float deathPosY;
+    bool GotDeathPosition = false;
     // Start is called before the first frame update
     private void Start()
     {
@@ -48,49 +50,41 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
         gc = GameObject.FindGameObjectWithTag("GC").GetComponent<GameController>();
-        
 
-    }
-    private void Awake()
-    {
         aimTransform = transform.Find("Aim");
     }
 
     // Update is called once per frame
     void Update()
     {
-        AimBow();
-        
-        Debug.Log("Bow Pos is: " + aimTransform.position);
+        Debug.Log("The player state is: " + playerState);
         if (playerState == StateList.die)
         {
-            rb.velocity = new Vector3(0, 0);
+            if(GotDeathPosition == false)
+            {
+                GetDeathPosition();
+                GotDeathPosition = true;
+            }
+            
+            transform.position = new Vector3(deathPosX, deathPosY);
         }
-        else if (playerState != StateList.die) //If player is hurt, movement cannot occur.
+        else if (playerState != StateList.die) //If player is dead, movement cannot occur.
         {
             Movement();
             AnimationState();
         }
         
         anim.SetInteger("state", (int)playerState); //int in front of state convert the enum into integer. Sets animation based on enum state
+    }
 
-        //Debug.Log(rb.velocity.x);
+    private void GetDeathPosition()
+    {
+        deathPosX = transform.position.x;
+        deathPosY = transform.position.y;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //if(collision.tag == "Collectable")
-        //{
-        //    BoxCollider2D collider = collision.gameObject.GetComponent<BoxCollider2D>(); //destroy the collectable
-        //    SpriteRenderer sprite = collision.gameObject.GetComponent<SpriteRenderer>();
-
-        //    collider.enabled = false;
-        //    sprite.enabled = false;
-
-
-        //    keysAmount += 1;
-        //    collectableText.text = "Keys: " + keysAmount.ToString();
-        //}
         if (collision.gameObject.tag == "HighScore")
         {
             gameFinished = true;
@@ -107,32 +101,9 @@ public class PlayerController : MonoBehaviour
 
 
     }
-
+    
     private void OnCollisionEnter2D(Collision2D other)
     {
-        //if(other.gameObject.tag == "Enemy")
-        //{
-        //    if(playerState == StateList.falling)
-        //    {
-        //        Destroy(other.gameObject);
-        //        jump();
-        //    }
-        //    else
-        //    {
-        //        playerState = StateList.hurt;
-        //        Debug.Log(playerState);
-        //        if (other.gameObject.transform.position.x > transform.position.x)//If the enemy's position is greater than the player's then it's to the player's right
-        //        {
-        //            //Therefore move the player left and take damage
-        //            rb.velocity = new Vector2(-hurtForce, rb.velocity.y);
-        //        }
-        //        else
-        //        {
-        //            //enemy is to the left so move the player right.
-        //            rb.velocity = new Vector2(hurtForce, rb.velocity.y);
-        //        }
-        //    }
-        //}
         if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "DeathGround")
         {
             if (playerState != StateList.die)
@@ -244,7 +215,7 @@ public class PlayerController : MonoBehaviour
             blink.Play();
             transform.position = new Vector2(transform.position.x + rb.velocity.x, transform.position.y);
             playerState = StateList.blinking;
-             anim.SetInteger("state", (int)playerState);
+            //anim.SetInteger("state", (int)playerState);
 
         }
         if (Input.GetButtonDown("Fire2")) //air brake
@@ -255,7 +226,7 @@ public class PlayerController : MonoBehaviour
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowRight();
             }
-            if (rb.velocity.x < -10f)
+            else if (rb.velocity.x < -10f)
             {
                 GameObject newWind = Instantiate(wind, windSpawnLeft.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
@@ -264,13 +235,13 @@ public class PlayerController : MonoBehaviour
 
             if (rb.velocity.x > 0f)
             {
-                rb.velocity = new Vector2(0, rb.velocity.y);
+                rb.velocity = new Vector2(0, 0);
                 playerState = StateList.braking;
                 finishBrake = false;
             }
-            if (rb.velocity.x < 0f)
+            else if (rb.velocity.x < 0f)
             {
-                rb.velocity = new Vector2(0, rb.velocity.y);
+                rb.velocity = new Vector2(0, 0);
                 playerState = StateList.braking;
                 finishBrake = false;
             }
@@ -342,7 +313,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimBow()
     {
-        Debug.Log("Mouse Pos is: " + Input.mousePosition);
+        //Debug.Log("Mouse Pos is: " + Input.mousePosition);
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0f;
 

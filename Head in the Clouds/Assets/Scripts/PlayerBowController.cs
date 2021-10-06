@@ -26,7 +26,7 @@ public class PlayerBowController : MonoBehaviour
 
         aimTransform.eulerAngles = new Vector3(0, 0, angle);
 
-        Debug.Log(angle);
+        //Debug.Log(angle);
     }
 
 

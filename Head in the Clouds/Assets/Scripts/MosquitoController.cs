@@ -13,6 +13,8 @@ public class MosquitoController : MonoBehaviour
     public float delayTimerGo;
     public float delayTimerStop;
 
+    public float border = 20f;
+
     private bool up = true;
 
     private void Start()
@@ -23,8 +25,9 @@ public class MosquitoController : MonoBehaviour
 
     void Update()
     {
-        if (originalXPos <= transform.position.x + 10)
+        if (originalXPos >= transform.position.x + border)
         {
+            Debug.Log("Going Right");
             if (up)
             {
                 StartCoroutine(ZigZagRightUp());
@@ -34,8 +37,9 @@ public class MosquitoController : MonoBehaviour
                 StartCoroutine(ZigZagRightDown());
             }
         }
-        else if (originalXPos > transform.position.x - 10)
+        else if (originalXPos < transform.position.x - border)
         {
+            Debug.Log("Going Left");
             if (up)
             {
                 StartCoroutine(ZigZagLeftUp());
