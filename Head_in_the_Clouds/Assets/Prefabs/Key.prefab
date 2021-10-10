@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 524985871828955093}
   - component: {fileID: 3474983358735571969}
   - component: {fileID: 3655755528056690861}
+  - component: {fileID: 1869847819995438251}
   m_Layer: 0
   m_Name: Key
   m_TagString: Collectable
@@ -145,3 +146,24 @@ MonoBehaviour:
   player: {fileID: 0}
   teleportDistance: 30
   followSpeed: 0.15
+--- !u!50 &1869847819995438251
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524985871828955097}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

@@ -34,7 +34,8 @@ public class Key : MonoBehaviour
         }
         if (collision.gameObject.tag == "DoorWayToEarth")
         {
-            Destroy(this);
+            //Destroy the key when collected
+            Destroy(this.gameObject);
         }
     }
     // Update is called once per frame

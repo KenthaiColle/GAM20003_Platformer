@@ -7,6 +7,7 @@ ScriptsOnlyBuild:
     - Fountain
     - FrogController
     - GameController
+    - GhostController
     - Halo
     - Key
     - Lightning
@@ -30,8 +31,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -122,9 +125,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 14176}
     - Class: 114
-      Script: {instanceID: 14482}
+      Script: {instanceID: 14310}
     - Class: 114
-      Script: {instanceID: 14504}
+      Script: {instanceID: 14484}
+    - Class: 114
+      Script: {instanceID: 14506}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -452,7 +457,7 @@ ScriptsOnlyBuild:
     className: StopWatchController
   - hash:
       serializedVersion: 2
-      Hash: 8f3f7de75e67b9f708c04dee25e1b2a1
+      Hash: 429e820151aca5a5d0e5d9f16578ab0e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DoorWayToEath
@@ -666,6 +671,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_StyleSheet
+  - hash:
+      serializedVersion: 2
+      Hash: 090deb1d2462422737e30adb1d0721bc
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GhostController
   - hash:
       serializedVersion: 2
       Hash: a2612813f45d0ced02c3e4bc9dbea8b4

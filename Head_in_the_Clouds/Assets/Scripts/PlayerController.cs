@@ -57,13 +57,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("The player state is: " + playerState);
+        //Debug.Log("The player state is: " + playerState);
         if (playerState == StateList.die)
         {
             if(GotDeathPosition == false)
             {
                 GetDeathPosition();
                 GotDeathPosition = true;
+                rb.velocity = new Vector2(0, 0); // just in case
             }
             
             transform.position = new Vector3(deathPosX, deathPosY);
@@ -92,9 +93,11 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "DeathGround")
         {
+            Debug.Log(collision.gameObject.tag);
             if(playerState != StateList.die)
             {
                 playerState = StateList.die;
+                //StartCoroutine(Die());
             }
             
         }
@@ -106,9 +109,11 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "DeathGround")
         {
+            Debug.Log(other.gameObject.tag);
             if (playerState != StateList.die)
             {
                 playerState = StateList.die;
+                //StartCoroutine(Die());
             }
         }
 
@@ -215,8 +220,6 @@ public class PlayerController : MonoBehaviour
             blink.Play();
             transform.position = new Vector2(transform.position.x + rb.velocity.x, transform.position.y);
             playerState = StateList.blinking;
-            //anim.SetInteger("state", (int)playerState);
-
         }
         if (Input.GetButtonDown("Fire2")) //air brake
         {
@@ -335,7 +338,7 @@ public class PlayerController : MonoBehaviour
         playerState = StateList.jumping;
     }
 
-    private void Die()
+    private void Respawn()
     {
         transform.position = gc.lastCheckpointPos; //Change the position to the last checkpoint if the player dies
         rb.velocity = new Vector2(0, 0); //reset velocity;
@@ -344,8 +347,13 @@ public class PlayerController : MonoBehaviour
         GotDeathPosition = false;
     }
 
+    //private IEnumerator Die()
+    //{
+    //    anim.SetInteger("state", 4); //Hard coding animation to test
+    //    yield return new WaitForSeconds(1.03f);
+    //    Respawn();
+    //}
 
 
-    
-    
+
 }

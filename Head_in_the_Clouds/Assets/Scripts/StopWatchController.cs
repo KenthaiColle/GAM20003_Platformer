@@ -29,7 +29,6 @@ public class StopWatchController : MonoBehaviour
         
         Debug.Log(gameFinished);
         stopwatchActive = true;
-        PlayerPrefs.SetFloat("HighscoreTime", 0);
         initialTime = Time.time;
         if (PlayerPrefs.HasKey("HighscoreTime") == false)
         {
@@ -37,7 +36,13 @@ public class StopWatchController : MonoBehaviour
         }
         else
         {
-
+            float totalSeconds = PlayerPrefs.GetFloat("HighscoreTime");
+            TimeSpan time = TimeSpan.FromSeconds(totalSeconds);
+            highScoreTimeText.text = time.ToString(@"mm\:ss\.fff");
+            
+            Debug.Log("Best Time: " + time.ToString(@"mm\:ss\.fff"));
+            //float highscoreTime = PlayerPrefs.GetFloat("HighscoreTime");
+            //highScoreTimeText.text = "Best Time: " + highscoreTime.ToString(@"mm\:ss\.fff");
         }
         
     }
@@ -65,7 +70,7 @@ public class StopWatchController : MonoBehaviour
     {
         
         float TimeTaken = Time.time - initialTime;
-        if ((TimeTaken) > PlayerPrefs.GetFloat("HighscoreTime"))//">" or "<" I'm not sure.. If the highscore is the highest time taken then ">" is right , otherwise change it to "<"
+        if ((TimeTaken) < PlayerPrefs.GetFloat("HighscoreTime"))
         {
             print("Highscore time is " + TimeTaken);
             PlayerPrefs.SetFloat("HighscoreTime", TimeTaken);

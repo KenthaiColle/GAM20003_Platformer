@@ -6,21 +6,17 @@ public class DoorWayToEath : MonoBehaviour
 {
     [SerializeField] private int numberOfKeys = 0;
     [SerializeField] private int target = 4;
+    public SpriteRenderer winPlaceholder;
+    public PlayerController pc;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Collectable")
         {
             numberOfKeys++;
-            //Destroy(collision.gameObject);
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -28,6 +24,8 @@ public class DoorWayToEath : MonoBehaviour
         if(numberOfKeys == target) // win condition
         {
             // Win here, save highscore.
+            winPlaceholder.enabled = true;
+            pc.gameFinished = true;
         }
     }
 }
