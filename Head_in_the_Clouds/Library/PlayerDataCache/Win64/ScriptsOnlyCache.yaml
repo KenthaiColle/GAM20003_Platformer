@@ -45,6 +45,7 @@ ScriptsOnlyBuild:
     - UnityEngine.EventSystems.StandaloneInputModule
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
@@ -63,6 +64,8 @@ ScriptsOnlyBuild:
     - Class: 50
       Script: {instanceID: 0}
     - Class: 61
+      Script: {instanceID: 0}
+    - Class: 65
       Script: {instanceID: 0}
     - Class: 66
       Script: {instanceID: 0}
@@ -94,6 +97,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 11948}
     - Class: 114
       Script: {instanceID: 11998}
+    - Class: 114
+      Script: {instanceID: 12134}
     - Class: 114
       Script: {instanceID: 12192}
     - Class: 114
@@ -181,7 +186,7 @@ ScriptsOnlyBuild:
     className: FrogController
   - hash:
       serializedVersion: 2
-      Hash: 00e1a5de8e77c3574b73cf63e92e467e
+      Hash: be5aa7f6036cb6b781bc401d6cbb54b1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -457,7 +462,7 @@ ScriptsOnlyBuild:
     className: StopWatchController
   - hash:
       serializedVersion: 2
-      Hash: 429e820151aca5a5d0e5d9f16578ab0e
+      Hash: 074631017ec1a974aead48a794435453
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DoorWayToEath
@@ -788,4 +793,5 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Ken/Downloads/Unity test/Head in the Clouds.exe
+  playerPath: C:/Users/Ken/Downloads/Head_in_the_clouds_TestBuild_V02/Head in the
+    Clouds.exe

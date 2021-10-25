@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: 8246035514510587718
     second: Mural 3_4
+  - first:
+      213: 6967666262926639538
+    second: Mural 3_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -208,7 +211,7 @@ TextureImporter:
         width: 699
         height: 192
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -216,6 +219,27 @@ TextureImporter:
       bones: []
       spriteID: 647b8af6c9dcf6270800000000000000
       internalID: 8246035514510587718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mural 3_5
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 1619
+        width: 919
+        height: 457
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b14733cc8f12b060800000000000000
+      internalID: 6967666262926639538
       vertices: []
       indices: 
       edges: []

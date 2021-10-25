@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     GameController gc;
 
     //Finite State Machine
-    public enum StateList {idle, running, jumping, falling, die, blinking, braking}
+    public enum StateList {idle, running, jumping, falling, die, blinking, braking, die_2}
     public StateList playerState = StateList.idle;
     private bool finishedBlink = false;
     public bool gameFinished = false;
@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 7f;
     [SerializeField] private float playerJumpForce = 12f;
     [SerializeField] private float playerJumpSpeed = 12f;
-    [SerializeField] private int keysAmount = 0;
+    //[SerializeField] private int keysAmount = 0;
+    [SerializeField] private int DeathCount = 0;
     [SerializeField] private Text collectableText;
     [SerializeField] private float hurtForce = 10f;
     [SerializeField] private float delayTimer = 1.02f;
@@ -32,6 +33,10 @@ public class PlayerController : MonoBehaviour
     //Sound
     [SerializeField] private AudioSource wingFlap;
     [SerializeField] private AudioSource blink;
+    [SerializeField] private AudioSource windSound;
+
+    //Text
+    public Text DeathText;
 
     public GameObject wind;
     public Wind windScript;
@@ -58,7 +63,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Debug.Log("The player state is: " + playerState);
-        if (playerState == StateList.die)
+        if (playerState == StateList.die || playerState == StateList.die_2)
         {
             if(GotDeathPosition == false)
             {
@@ -69,14 +74,15 @@ public class PlayerController : MonoBehaviour
             
             transform.position = new Vector3(deathPosX, deathPosY);
         }
-        else if (playerState != StateList.die) //If player is dead, movement cannot occur.
+        else if (playerState != StateList.die || playerState != StateList.die_2) //If player is dead, movement cannot occur.
         {
             Movement();
             AnimationState();
         }
-        
+
         anim.SetInteger("state", (int)playerState); //int in front of state convert the enum into integer. Sets animation based on enum state
     }
+
 
     private void GetDeathPosition()
     {
@@ -91,7 +97,7 @@ public class PlayerController : MonoBehaviour
             gameFinished = true;
             Debug.Log(gameFinished);
         }
-        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "DeathGround")
+        if (collision.gameObject.tag == "DeathGround")
         {
             Debug.Log(collision.gameObject.tag);
             if(playerState != StateList.die)
@@ -101,19 +107,37 @@ public class PlayerController : MonoBehaviour
             }
             
         }
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Death_NonLightninng")
+        {
+            Debug.Log(collision.gameObject.tag);
+            if (playerState != StateList.die)
+            {
+                playerState = StateList.die;
+                //StartCoroutine(Die());
+            }
+
+        }
 
 
     }
     
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "DeathGround")
+        if (other.gameObject.tag == "DeathGround")
         {
             Debug.Log(other.gameObject.tag);
             if (playerState != StateList.die)
             {
                 playerState = StateList.die;
                 //StartCoroutine(Die());
+            }
+        }
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Death_NonLightninng")
+        {
+            Debug.Log(other.gameObject.tag);
+            if (playerState != StateList.die_2)
+            {
+                playerState = StateList.die_2;
             }
         }
 
@@ -125,7 +149,7 @@ public class PlayerController : MonoBehaviour
         var hDirectionTap = Input.GetButtonDown("Horizontal");
 
         //moving left
-        if (hDirection < 0)
+        if (hDirection < 0) 
         {
             if (rb.velocity.x >= -speed && coll.IsTouchingLayers(ground))
             {
@@ -157,7 +181,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Horizontal") && playerState == StateList.jumping || playerState == StateList.falling || playerState == StateList.blinking || playerState == StateList.braking)
         {
-            if (hDirection < 0)
+            if (Input.GetKeyDown("a")) //hDirection < 0 << was changed since it created input delay due to gravity in input manager.
             {
                 if (rb.velocity.x > 0)// check if val is already negative
                 {
@@ -166,7 +190,7 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
-            if (hDirection > 0)
+            if (Input.GetKeyDown("d")) //hDirection > 0
             {
                 if (rb.velocity.x < 0)// check if val is already negative
                 {
@@ -179,13 +203,13 @@ public class PlayerController : MonoBehaviour
             //If the player just jump without moving so vel for x == 0. Then move.
             if (rb.velocity.x == 0)
             {
-                if (hDirection < 0)
+                if (Input.GetKeyDown("a"))
                 {
                     rb.velocity = new Vector2(-speed, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
                     gameObject.GetComponent<SpriteRenderer>().flipX = false;
                 }
 
-                if (hDirection > 0)
+                if (Input.GetKeyDown("d"))
                 {
                     rb.velocity = new Vector2(speed, rb.velocity.y); //rb.velocity.y allows the gravity to work instead of hard coding 0 which just makes the player stay at 0
                     gameObject.GetComponent<SpriteRenderer>().flipX = true; //Make this flip right and flip left funtion.
@@ -215,25 +239,27 @@ public class PlayerController : MonoBehaviour
 
         }
         
-        if (Input.GetButtonDown("Fire1")) //Blink teleport
+        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown("j")) //Blink teleport
         {
             blink.Play();
             transform.position = new Vector2(transform.position.x + rb.velocity.x, transform.position.y);
             playerState = StateList.blinking;
         }
-        if (Input.GetButtonDown("Fire2")) //air brake
+        if (Input.GetButtonDown("Fire2") || Input.GetKeyDown("k")) //air brake
         {
             if(rb.velocity.x > 10f)
             {
                 GameObject newWind = (GameObject)Instantiate(wind, windSpawnRight.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowRight();
+                windSound.Play();
             }
             else if (rb.velocity.x < -10f)
             {
                 GameObject newWind = Instantiate(wind, windSpawnLeft.position, transform.rotation) as GameObject;
                 windScript = newWind.GetComponent<Wind>();
                 windScript.BlowLeft();
+                windSound.Play();
             }
 
             if (rb.velocity.x > 0f)
@@ -345,6 +371,8 @@ public class PlayerController : MonoBehaviour
         playerState = StateList.idle;
         anim.SetInteger("state", 0);
         GotDeathPosition = false;
+        DeathCount++;
+        DeathText.text = ": " + DeathCount;
     }
 
     //private IEnumerator Die()

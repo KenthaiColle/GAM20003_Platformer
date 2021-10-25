@@ -15,7 +15,7 @@ public class Key : MonoBehaviour
     private Vector3 originalTransform;
 
     private bool collected = false;
-    private bool doneWithKey = false; // if the key is inserted into the doorway or not
+    //private bool doneWithKey = false; // if the key is inserted into the doorway or not
 
     // Start is called before the first frame update
     void Start()
