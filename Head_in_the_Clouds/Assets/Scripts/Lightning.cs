@@ -24,14 +24,20 @@ public class Lightning : MonoBehaviour
     void Update()
     {
        
-        if(coroutineStarted == false)
-        {
-            StartCoroutine(EnableColl());
-            coroutineStarted = true;
-        }
+        //if(coroutineStarted == false)
+        //{
+        //    StartCoroutine(EnableColl());
+        //    coroutineStarted = true;
+        //}
         
 
     }
+
+    public void StartLightning()
+    {
+        StartCoroutine(EnableColl());
+    }
+
     private IEnumerator EnableColl()
     {
         lightning.Play();
@@ -44,7 +50,7 @@ public class Lightning : MonoBehaviour
 
         anim.SetBool("On", false);
         coll.enabled = false;
-        yield return new WaitForSeconds(pauseTimer);
-        coroutineStarted = false;
+        //yield return new WaitForSeconds(pauseTimer); Code before linking it to cloud animation
+        //coroutineStarted = false;
     }
 }
